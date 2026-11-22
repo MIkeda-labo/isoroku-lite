@@ -1,0 +1,71 @@
+{
+  "id": "remote-control",
+  "title": "/remote-control で、PC の Claude Code をスマホから続ける",
+  "summary": "PC で動いている Claude Code の会話を、スマホのブラウザや Claude アプリから続けます。つなぎ方、切り方、気をつけることまで練習します。",
+  "order": 15,
+  "practice": {
+    "dir": "~/practice/remote-control",
+    "firstMessage": "こんにちは。/remote-control で、この会話をスマホから続けてみたいです。まず何をすればいい？"
+  },
+  "status": "draft",
+  "updated": "2026-11-21",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=cXcwNtMvLC4（まさやん【AIギルドch】「Claude Code ループエンジニアリング 完全版」。ループを回したまま、PC の前にいなくてもスマホで確認・指示する話。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。本物の Claude Code で手順どおりに動くかは、まだ確かめていない。スマホが要る"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/remote-control"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "使える条件を確かめる",
+      "do": "自分が claude.ai のアカウントでログインしているか（API キーではないか）を確かめる。分からなければ /login で claude.ai からログインし直す。",
+      "why": "Remote Control は Pro・Max・Ultra・Team・Enterprise のプランで使える。API キーでは使えない。Team・Enterprise では、管理者が先に有効にしておく必要がある。",
+      "success": "claude.ai のアカウントでログインしている。",
+      "pitfalls": [
+        "API キーで動かしている Claude Code では使えない（ログインのしかたが違う）。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "いまの会話を、スマホからつなげる状態にする",
+      "do": "練習フォルダで Claude Code を起動し、入力欄に「/remote-control」（短く「/rc」でもよい）と打つ。",
+      "why": "いま PC で動いている会話を、ほかの機器から続けられるようにするコマンド。つなぐための URL が表示される。",
+      "success": "つなぐための URL などが表示される。",
+      "pitfalls": [
+        "ホームのフォルダ（~）そのもので始めると、「このフォルダを信頼するか」の答えが保存されない。練習フォルダで始める。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "スマホからつないで、頼みごとを1つ送る",
+      "do": "スマホで、表示された URL をブラウザで開く。または Claude アプリ（claude.ai/code）で、この会話を名前で探して開く。開いたら「このフォルダにあるファイルを教えて」と送る。",
+      "why": "スマホから送った頼みごとは、PC で動いている Claude Code が処理する。PC のファイルや道具、設定がそのまま使える。",
+      "success": "スマホに返事が出て、PC の画面にも同じやりとりが出ている。",
+      "pitfalls": [
+        "アプリが入っていないときは、/mobile でアプリを入れるための QR コードが出せる。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "切る",
+      "do": "PC の Claude Code で、もう一度「/remote-control」と打ち、出てきた画面から切る。",
+      "why": "切っても、PC の会話はそのまま続けられる。",
+      "success": "スマホから送っても、PC の会話に届かなくなる。",
+      "pitfalls": [
+        "Claude Code そのものを終了すると、スマホからも使えなくなる。つないでいる間は、PC を起動したまま、claude も動かしたままにしておく。"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "気をつけることを言えるようにする",
+      "do": "Remote Control を使うときに気をつけることを、自分の言葉で2つ言う。",
+      "why": "便利な反面、会話の置き場所が増える。知ったうえで使う。",
+      "success": "「つないでいる間、会話の記録は Anthropic のサーバーに置かれる」「PC と claude を動かしたままにする必要がある（PC の受け口のポートは開かない）」の2つが言える。",
+      "pitfalls": [
+        "会社のアカウントでは、設定で使えないようにされていることがある。"
+      ]
+    }
+  ]
+}

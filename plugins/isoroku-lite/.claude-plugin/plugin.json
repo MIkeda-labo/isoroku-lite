@@ -1,0 +1,9 @@
+{
+  "name": "isoroku-lite",
+  "displayName": "isoroku-lite",
+  "version": "0.1.0",
+  "description": "Claude Code の使い方を、あなた自身の Claude Code がコーチする講座（16講座）。エラーが続くと見守りが気づき、ヒントを方向 → 具体例 → 答えの順に出す。画面共有なし・外部への送信なし。",
+  "author": { "name": "yuuzaki" },
+  "license": "MIT",
+  "keywords": ["learning", "coach", "tutorial", "japanese"]
+}

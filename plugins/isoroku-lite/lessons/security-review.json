@@ -1,0 +1,66 @@
+{
+  "id": "security-review",
+  "title": "/security-review で、変更の安全性を調べる",
+  "summary": "練習用のリポジトリでわざと危ない変更を作り、/security-review で見つけてもらい、直すところまでやります。",
+  "tier": "S",
+  "order": 11,
+  "practice": {
+    "dir": "~/practice/security-review",
+    "firstMessage": "こんにちは。/security-review の練習をしたいです。このコマンドは、何と何の差を調べる？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）",
+    "手順1の git の準備（bare の origin を作る → 最初のコミットを push → git remote set-head origin --auto）で origin/HEAD ができ、git diff --name-only origin/HEAD... が変更したファイルを返すことは、2026-11-11 に手元で確かめた。/security-review そのものは、まだ走らせていない"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/commands",
+    "https://code.claude.com/docs/en/errors"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "練習用のリポジトリを用意する",
+      "do": "Claude に頼む。「このフォルダを git のリポジトリにして。origin は、となりに作る ../security-review-origin.git という bare リポジトリにして。README.md を1つ作って最初のコミットをし、git push -u origin HEAD で push して、最後に git remote set-head origin --auto を実行して」。",
+      "why": "/security-review は、いまのブランチと「origin の既定のブランチ」との差を調べる。origin が無いと動かない。",
+      "success": "git rev-parse --abbrev-ref origin/HEAD と頼むと、origin/main か origin/master が返ってくる。",
+      "pitfalls": [
+        "origin が空のまま（まだ何も push していない）だと、git remote set-head origin --auto は「Cannot determine remote HEAD」で失敗する。先に push する。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "ブランチを作って、わざと危ない変更を入れる",
+      "do": "Claude に頼む。「try-review というブランチを作って。練習用に、わざと安全でない小さなプログラム login.js を作って（例: 受け取った名前を、そのまま SQL の文に連結する）。作ったらコミットして」。",
+      "why": "調べる対象は、origin の既定のブランチからの差。差が無ければ、調べるものが無い。",
+      "success": "try-review のブランチに、login.js を足したコミットがある。",
+      "pitfalls": [
+        "既定のブランチの上でそのまま作業すると、origin との差が空になることがある。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "/security-review を走らせる",
+      "do": "Claude Code の入力欄で /security-review と打つ。",
+      "why": "いまのブランチの変更を、セキュリティの弱点（インジェクション、認証の問題、データの漏れなど）の目で調べてくれる。",
+      "success": "調べた結果が返ってきて、login.js の危ない所が指摘されている。",
+      "pitfalls": [
+        "「ambiguous argument 'origin/HEAD...'」というエラーで止まる。origin/HEAD が無いのが原因。git remote set-head origin <既定のブランチ名> を実行してから、もう一度 /security-review と打つ。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "指摘を直して、もう一度調べる",
+      "do": "Claude に「指摘された所を直して、コミットして」と頼む。そのあと、もう一度 /security-review と打つ。",
+      "why": "直ったかどうかは、もう一度調べて確かめる。",
+      "success": "同じ指摘が出なくなった。",
+      "pitfalls": []
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-224458-local-security-review/demo.cast",
+    "note": "練習用のリポジトリ（origin/HEAD も作る）に、わざと SQL インジェクションのある login.js を入れて /security-review で指摘を受け、直してもう一度走らせ、指摘なしになるまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

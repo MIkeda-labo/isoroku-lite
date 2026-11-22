@@ -1,0 +1,67 @@
+{
+  "id": "session-naming",
+  "title": "セッションに名前を付けて、あとで戻る",
+  "summary": "名前を付けて起動し、途中で名前を変え、いったん終わってから名前で戻るところまでやります。",
+  "tier": "S",
+  "order": 7,
+  "practice": {
+    "dir": "~/practice/session-naming",
+    "firstMessage": "こんにちは。セッションに名前を付ける練習をしています。このセッションの名前を途中で変えるには、何と打てばいい？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/sessions",
+    "https://code.claude.com/docs/en/cli-reference",
+    "https://code.claude.com/docs/en/commands"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "名前を付けて起動する",
+      "do": "黒い画面で claude -n \"naming-practice\" と打って起動する（-n は --name の短い形）。もう起動してしまっているときは、この手順を飛ばして手順2へ進んでよい。",
+      "why": "名前を付けておくと、セッションの一覧で見つけやすく、名前で戻れる。いくつもの作業を並べて進めるときに、特に効く。",
+      "success": "名前を付けて起動できた。",
+      "pitfalls": [
+        "名前を付けなくても、Claude Code が最初の依頼を短くまとめた題名を自動で付ける。ただし、自分で付けた名前のほうが探しやすい。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "途中で名前を変える",
+      "do": "Claude Code の入力欄で /rename hello-practice と打つ。",
+      "why": "作業の中身が変わったら、名前も合わせておくと、あとで迷わない。",
+      "success": "入力欄のところ（プロンプトバー）に、新しい名前が出ている。",
+      "pitfalls": [
+        "/rename だけを打つ（名前を書かない）と、会話の内容から名前が自動で付く。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "いったん終わって、名前で戻る",
+      "do": "/exit と打って Claude Code を終える。そのあと、同じフォルダで、黒い画面に claude --resume hello-practice と打つ（--resume は -r でもよい）。",
+      "why": "名前がぴったり合うセッションが1つなら、一覧を開かずに、そのセッションへ直接戻れる。",
+      "success": "さっきの会話の続きが開いた。",
+      "pitfalls": [
+        "同じ名前のセッションがいくつもあると、直接は戻らず、その名前で絞りこんだ一覧が開く。",
+        "Claude Code の中から戻るときは /resume hello-practice と打つ。名前がいくつも当てはまるとエラーになるので、そのときは /resume だけを打って一覧から選ぶ。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "一覧から選んで戻る",
+      "do": "Claude Code の入力欄で /resume と打ち、出てきた一覧に、付けた名前が並んでいるのを見る（選ばずに閉じてよい）。",
+      "why": "名前を忘れたときは、一覧から探せる。",
+      "success": "一覧の中で、自分が付けた名前を見つけられた。",
+      "pitfalls": []
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-223344-local-session-naming/demo.cast",
+    "note": "claude -n で名前を付けて起動し、/rename で名前を変え、/exit のあと claude --resume hello-practice で戻るまでの録画。/resume の一覧には、いま開いているセッション自身は出ない。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

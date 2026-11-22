@@ -1,0 +1,67 @@
+{
+  "id": "model-selection",
+  "title": "モデルを選ぶ・切り替える",
+  "summary": "いまのモデルを確かめ、/model でこの回だけ切り替え、元に戻すところまでやります。",
+  "tier": "S",
+  "order": 4,
+  "practice": {
+    "dir": "~/practice/model-selection",
+    "firstMessage": "こんにちは。モデルの切り替えを練習したいです。いま使っているモデルはどうやって確かめる？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/model-config",
+    "https://code.claude.com/docs/en/prompt-caching",
+    "https://code.claude.com/docs/en/commands"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "いま使っているモデルを確かめる",
+      "do": "/status と打つ。出てきた画面で、モデルの名前を読む。",
+      "why": "切り替える前に、いまが何かを知っておくと、あとで元に戻せるため。",
+      "success": "いまのモデルの名前を言える（メモしておく）。",
+      "pitfalls": []
+    },
+    {
+      "id": "2",
+      "title": "/model で一覧を開き、この回だけ切り替える",
+      "do": "/model と打って一覧を開く。切り替えたいモデルの行に合わせて、s を押す（この回だけ切り替える）。",
+      "why": "Enter で選ぶと、その選択が「これからの新しいセッションの既定」として保存される。練習では、既定を変えない s を使う。",
+      "success": "/status で、モデルが変わっている。",
+      "pitfalls": [
+        "/model sonnet のように名前を直接打つと、Enter と同じ扱いになり、既定として保存される。",
+        "名前の別名: sonnet は日々のコーディング、opus は複雑な推論、haiku は速くて軽い作業、fable はいちばん難しく長い作業向け。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "作業の途中で切り替えるとどうなるかを知る",
+      "do": "モデルを切り替えたあとの最初の送信で何が起きるかを、自分の言葉で言う。",
+      "why": "キャッシュはモデルごとに別。/model で切り替えると、次の送信は、会話の履歴の全部をキャッシュなしで読み直す（中身が同じでも）。",
+      "success": "「切り替えるなら、作業の始めに」と言える。",
+      "pitfalls": [
+        "キャッシュがまだ残っているあいだに /model を打つと、Claude Code が切り替えの確認を出す。故障ではない。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "元のモデルに戻す",
+      "do": "/model と打って一覧を開き、手順1でメモしたモデルの行で s を押す。",
+      "why": "練習で変えたままにしないため。",
+      "success": "/status で、手順1と同じモデルに戻っている。",
+      "pitfalls": [
+        "/model default と打つと、モデルの上書きを消して、アカウントの既定に戻る（default は別名ではなく、特別な値）。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-222415-local-model-selection/demo.cast",
+    "note": "/status でモデルを確かめ、/model で Sonnet 5.5 に s で切り替え（「Switch model?」の確認が出る）、Default に戻すまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

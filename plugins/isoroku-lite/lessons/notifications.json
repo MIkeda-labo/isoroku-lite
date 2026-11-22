@@ -1,0 +1,68 @@
+{
+  "id": "notifications",
+  "title": "作業が終わったら知らせてもらう（通知設定）",
+  "summary": "Claude Code が作業を終えたとき・確認で止まったときに、ベルで知らせるように設定して、試すところまでやります。",
+  "tier": "S",
+  "order": 10,
+  "practice": {
+    "dir": "~/practice/notifications",
+    "firstMessage": "こんにちは。作業が終わったときに知らせてもらう設定をしたいです。通知の設定はどこで変えられる？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）",
+    "この PC の黒い画面で、ベルが音や点滅として出るかは、まだ確かめていない（ターミナル側の設定による）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/terminal-config",
+    "https://code.claude.com/docs/en/settings-reference",
+    "https://code.claude.com/docs/en/hooks-guide"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "何もしないと通知が出ないことを知る",
+      "do": "既定（auto）でどうなるかを読む。Ghostty・Kitty・iTerm2 ではデスクトップ通知が出る。それ以外のターミナルでは、多くの場合、何も出ない。",
+      "why": "Claude Code は、作業を終えたとき・許可の確認で止まったときに、あなたがターミナルから離れているようなら通知の出来事を起こす。ただし、それをどう見せるかは、ターミナルと設定しだい。",
+      "success": "「自分のターミナルでは、設定しないと通知が出ないかもしれない」と言える。",
+      "pitfalls": []
+    },
+    {
+      "id": "2",
+      "title": "通知の出し方を「ターミナルのベル」にする",
+      "do": "/config と打って設定を開き、Local notifications を terminal_bell にする。",
+      "why": "terminal_bell にすると、どのターミナルでも、Claude Code がベルの文字を送る。",
+      "success": "Local notifications が terminal_bell になっている。",
+      "pitfalls": [
+        "設定ファイルで変えるときは、~/.claude/settings.json に \"preferredNotifChannel\": \"terminal_bell\" と書く。",
+        "通知を止めたいときは、notifications_disabled にする。元に戻すときは auto にする。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "少し時間のかかる作業を頼んで、ターミナルから離れる",
+      "do": "「1 から 30 までの数字を、1行に1つずつ書いた numbers.txt を作って、作ったあとで中身を確かめて」と頼む。送ったら、別のウィンドウに切り替えて待つ。",
+      "why": "通知は、あなたがターミナルから離れているように見えるときに出るため。",
+      "success": "作業が終わったときに、ベル（音や、ウィンドウの点滅など）で気づけた。",
+      "pitfalls": [
+        "ベルが音になるか、点滅になるか、何も起きないかは、ターミナル側の設定で決まる。何も起きないときは、ターミナルのベルの設定を見る。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "ほかの知らせ方があることを知る",
+      "do": "Notification フックという方法があることを読む。~/.claude/settings.json の hooks に Notification を書くと、Claude が入力や許可を待っているときに、好きなコマンド（音を鳴らす、通知を出す）を走らせられる。",
+      "why": "デスクトップ通知が届かないターミナルでも、フックなら知らせを出せる。フックは、組み込みの通知と並んで動く（置きかえではない）。",
+      "success": "「ベルで足りないときは、Notification フックがある」と言える。",
+      "pitfalls": [
+        "公式の Windows（PowerShell）用の例は、すみの通知ではなく、ダイアログの箱を開く。箱がターミナルの後ろに出ることがある。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-223850-local-notifications/demo.cast",
+    "note": "/config で Local notifications を Terminal bell にし、numbers.txt の作業を頼み、Notification フックの説明を聞き、最後に設定を Auto に戻すまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

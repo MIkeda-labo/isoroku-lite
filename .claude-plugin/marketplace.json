@@ -1,0 +1,12 @@
+{
+  "name": "isoroku-lite",
+  "description": "Claude Code の使い方を、あなた自身の Claude Code がコーチするプラグイン",
+  "owner": { "name": "yuuzaki" },
+  "plugins": [
+    {
+      "name": "isoroku-lite",
+      "source": "./plugins/isoroku-lite",
+      "description": "Claude Code の講座と、詰まったときだけ声をかける見守り"
+    }
+  ]
+}

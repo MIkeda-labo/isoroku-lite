@@ -1,0 +1,72 @@
+{
+  "id": "subagents",
+  "title": "サブエージェントを1つ作って、仕事を任せる",
+  "summary": "file-explainer というサブエージェントを作り、名前を指定して仕事を任せるところまでやります。",
+  "tier": "S",
+  "order": 1,
+  "practice": {
+    "dir": "~/practice/subagents",
+    "firstMessage": "こんにちは。サブエージェントを1つ作って使ってみたいです。まず何をすればいい？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/sub-agents"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "Claude に頼んで、サブエージェントのファイルを作ってもらう",
+      "do": "どんな役か、どこに保存するか、使える道具、モデルを文章で伝える。例:「このプロジェクト用に、.claude/agents/ に file-explainer というサブエージェントを作って。ファイルを読んで、中身をやさしい日本語で説明する役。読むだけ（Read, Grep, Glob）にして、モデルは haiku で」。",
+      "why": "サブエージェントは、YAML のフロントマターが付いた Markdown のファイル。自分で書いてもよいが、頼めば Claude が書いてくれる。",
+      "success": ".claude/agents/file-explainer.md ができている。",
+      "pitfalls": [
+        "置き場所で使える範囲が変わる。.claude/agents/ はこのプロジェクトだけ、~/.claude/agents/ は自分のすべてのプロジェクト。",
+        ".claude の先頭の点を落とす。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "できたファイルの中身を確かめる",
+      "do": "ファイルを開いて、フロントマターに name と description があること、tools と model が頼んだとおりであること、そのあとに本文（サブエージェントへの指示）があることを確かめる。",
+      "why": "Claude は description を見て、いつこのサブエージェントに任せるかを決めるため。name と description は必須。",
+      "success": "name・description・tools・model と、本文がそろっている。",
+      "pitfalls": [
+        "description があいまいで、任せてほしい場面で選ばれない。「いつ任せるか」を書く。",
+        "tools を省くと、サブエージェントが使える道具をすべて引き継ぐ。読むだけにしたいなら、tools に Read, Grep, Glob と書く。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "名前を指定して、仕事を任せる",
+      "do": "「file-explainer サブエージェントを使って、このフォルダのファイルを説明して」と頼む。必ずそのサブエージェントに任せたいときは、@ を打って候補から file-explainer を選んでから、頼みごとを書く。",
+      "why": "名前を文章に入れると、たいてい Claude が任せる（任せるかどうかは Claude が決める）。@ で選ぶと、そのサブエージェントが必ず動く。",
+      "success": "会話に file-explainer(…) という行が出て、そのあと結果のまとめが返ってくる。",
+      "pitfalls": [
+        "「そのサブエージェントは見つからない」と言われる。Claude Code を起動し直してから、もう一度頼む（公式: セッションを始めたときに agents のフォルダがまだ無かった場合に起きる）。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "どんなときに任せるかを言えるようにする",
+      "do": "サブエージェントに任せると何が良いかを、自分の言葉で1つ言う。目安: 検索の結果・ログ・ファイルの中身など、あとで見返さないものでメインの会話があふれそうな仕事を任せる。",
+      "why": "サブエージェントは自分専用のコンテキストで作業し、まとめだけを返す。メインの会話のコンテキストを使わずに済む。",
+      "success": "「メインの会話のコンテキストを守れる」「使える道具を制限できる」「速くて安いモデルに回せる」のどれかを、例つきで言える。",
+      "pitfalls": [
+        "サブエージェントの作業も、メインの会話と同じ利用上限に数えられる。"
+      ]
+    }
+  ],
+  "example": {
+    "path": ".claude/agents/file-explainer.md",
+    "content": "---\nname: file-explainer\ndescription: ファイルを読んで、中身をやさしい日本語で説明する。ユーザーが「このファイルは何？」「このフォルダを説明して」と頼んだときに使う。\ntools: Read, Grep, Glob\nmodel: haiku\n---\n\nあなたは、ファイルの中身を説明する係です。\n\n- 頼まれたファイル（またはフォルダの中のファイル）を読む。\n- 1つのファイルにつき、「何のファイルか」を1〜2文で説明する。\n- 専門用語には、短い言いかえを添える。\n- ファイルを書きかえたり、コマンドを実行したりしない。\n"
+  },
+  "demo": {
+    "recording": "demos/20261121-223626-local-subagents/demo.cast",
+    "note": ".claude/agents/file-explainer.md を作り、中身を確かめ、file-explainer に仕事を任せて結果を受け取るまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

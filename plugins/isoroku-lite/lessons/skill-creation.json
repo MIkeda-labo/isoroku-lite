@@ -1,0 +1,89 @@
+{
+  "id": "skill-creation",
+  "title": "Claude Code のスキルを1つ作る",
+  "summary": "hello というスキルを自分で作り、/hello と打って呼べるところまでやります。",
+  "tier": "S",
+  "order": 2,
+  "practice": {
+    "dir": "~/practice/hello",
+    "firstMessage": "こんにちは。.claude/skills/hello/SKILL.md を作りたいです。まず何をすればいい？",
+    "exampleCommand": "! mkdir -p .claude/skills/hello",
+    "check": "skills"
+  },
+  "status": "adopted",
+  "updated": "2026-11-10",
+  "basedOn": [
+    "lessons/demos/20261109-232122-local-skill-creation（ローカルの Claude Code の実演。SKILL.md は正しくでき、起動し直すと /hello で動いた）",
+    "lessons/demos/20261110-072025-local-skill-creation（録り直し。前に作った hello を消してから実演し、/reload-skills で読み込み、/hello で動くところまで録画）"
+  ],
+  "demo": {
+    "recording": "demos/20261110-072025-local-skill-creation/demo.cast",
+    "note": "ローカルの Claude Code が、専用のフォルダで hello スキルを作り、/reload-skills で読み込んでから /hello で呼ぶまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  },
+  "sources": [
+    "https://code.claude.com/docs/en/skills",
+    "https://code.claude.com/docs/en/permission-modes"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "作業するフォルダを確かめる",
+      "do": "いまどのフォルダにいて、中に何があるかを確かめる。",
+      "why": "作る場所を取り違えたり、すでにあるファイルを上書きしたりする事故を防ぐため。",
+      "success": "いまの場所と、その中身が分かっている。",
+      "pitfalls": ["別のフォルダで作ってしまい、あとでスキルが見つからない。"]
+    },
+    {
+      "id": "2",
+      "title": "スキルの置き場所を決める",
+      "do": "このプロジェクトだけで使うなら .claude/skills/<スキル名>/SKILL.md、すべてのプロジェクトで使うなら ~/.claude/skills/<スキル名>/SKILL.md に置く。",
+      "why": "置き場所によって、スキルが使える範囲が決まるため。",
+      "success": "置き場所（プロジェクト用か、自分用か）と、スキル名（フォルダ名）が決まっている。",
+      "pitfalls": [".claude の先頭の点を落とす。", "スキル名のフォルダを作らず、skills/ の直下に置いてしまう。"]
+    },
+    {
+      "id": "3",
+      "title": "SKILL.md を作り、フロントマターに description を書く",
+      "do": "SKILL.md の1行目を --- にし、description（何をするスキルか・いつ使うか）を書いて、--- で閉じる。name は省略してよい（省略するとフォルダ名になる）。",
+      "why": "Claude は description を見て、いつこのスキルを使うかを決めるため。",
+      "success": "1行目が ---、description がある、--- で閉じている。",
+      "pitfalls": [
+        "1行目が --- でない（前に空行があるなど）。Claude Code は、1行目が --- のときだけフロントマターを読む。",
+        "YAML として崩れている（閉じる --- がない など）。スキルは読み込まれるが、description などの設定が空になる。",
+        "description があいまい（「あいさつ用」だけ など）。頼み方で呼んだときに、Claude がこのスキルを選びにくい。「何をするか」と「いつ使うか」の両方を書く。",
+        ".claude/ への書き込みは、Claude Code が「許可しますか？」と確認する（守られた場所）。自動で判定するモードでは、自動で判断される。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "本文（Claude への指示）を書く",
+      "do": "フロントマターのあとに、スキルが呼ばれたときに Claude がすることを書く（手順・守ること・返し方の例）。",
+      "why": "本文が、スキルが呼ばれたときの Claude への指示になるため。",
+      "success": "呼ばれたら何をして、どう返すかが書いてある。",
+      "pitfalls": ["長すぎる。SKILL.md は 500 行以内にし、細かい資料は別のファイルに分ける。"]
+    },
+    {
+      "id": "5",
+      "title": "書いた内容を確かめる",
+      "do": "SKILL.md を開いて、1行目が --- であること、description があること、そのあとに本文があることを確かめる。",
+      "why": "呼ぶ前に形の間違いを見つけておくと、原因を探す手間が省けるため。",
+      "success": "3つ（1行目の ---、description、本文）がそろっている。",
+      "pitfalls": []
+    },
+    {
+      "id": "6",
+      "title": "読み込ませて、呼んで試す",
+      "do": "/スキル名（例: /hello）と打つ。この回の途中で .claude/skills/ のフォルダを新しく作ったときは、先に /reload-skills と打って読み込ませる（または Claude Code を起動し直す）。頼み方（例:「あいさつして」）でも呼べる。",
+      "why": "Claude Code は、起動したときに無かったスキルのフォルダをまだ見張っていないため。",
+      "success": "スキルの指示どおりの返事が返ってくる。",
+      "pitfalls": [
+        "/hello で「Unknown command: /hello. Did you mean /help?」と出る。起動したあとに .claude/skills/ を作ったときに起きる。/reload-skills を打ってから、もう一度 /hello と打つ（2026-11-09 の実演で実際に起きた）。",
+        "途中で作った .claude/skills/ の中で SKILL.md を直したのに、直る前の動きのまま。そのフォルダは見張られていないので、直すたびに /reload-skills を打つ。"
+      ]
+    }
+  ],
+  "example": {
+    "path": ".claude/skills/hello/SKILL.md",
+    "content": "---\ndescription: 日本語であいさつと「今日の一言」を返すスキル。ユーザーが /hello と打ったとき、または「あいさつして」「今日の一言をちょうだい」などと頼んだときに使う。\n---\n\n# hello スキル\n\nこのスキルが呼ばれたら、次の形で日本語で返してください。\n\n1. **あいさつ**: 時間帯に合わせた、明るく短いあいさつを1行で書く（例:「こんにちは！」）。\n2. **今日の一言**: 前向きになれる短い言葉を1つ、「今日の一言:」に続けて書く。\n   - 1〜2文で、やさしく分かりやすい言葉にする。\n   - 毎回同じにならないように変える。\n\n## 返し方の例\n\nこんにちは！今日も来てくれてありがとうございます。\n\n今日の一言: 小さな一歩でも、昨日の自分より前に進んでいます。\n\n## 注意\n\n- ファイルを作ったりコマンドを実行したりせず、あいさつと一言だけを返す。\n- 長い説明はつけない。\n"
+  }
+}

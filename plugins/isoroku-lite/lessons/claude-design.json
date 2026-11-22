@@ -1,0 +1,59 @@
+{
+  "id": "claude-design",
+  "title": "/design で、画面の下絵（デザイン）を作る",
+  "summary": "/design に短い依頼を渡して、Claude Design のキャンバスに下絵を作り、ブラウザで開いて直すところまでやります。",
+  "tier": "S",
+  "order": 6,
+  "practice": {
+    "dir": "~/practice/claude-design",
+    "firstMessage": "こんにちは。/design で画面の下絵を作ってみたいです。使える条件から教えて。"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/artifacts",
+    "https://code.claude.com/docs/en/commands"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "使える条件を確かめる",
+      "do": "次の3つを確かめる。(1) claude.ai のアカウントでサインインしている（していなければ /login）。(2) プランが Pro・Max・Ultra・Team・Enterprise のどれか。(3) Claude Code が v2.1.265 以降（/status で版が分かる）。",
+      "why": "/design は、作った下絵を「アーティファクト」として claude.ai に公開する。この条件を満たさないと、公開できない。",
+      "success": "3つとも満たしていると言える。",
+      "pitfalls": [
+        "API キーでつないでいるセッションでは、公開できない。",
+        "Enterprise では、管理者が Design のテンプレートをオンにしていないと、/design は下絵を作らない。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "/design に、作りたいものを短く渡す",
+      "do": "/design のあとに、描いてほしいものを書く。例: /design 読書記録アプリのホーム画面（スマホ用）",
+      "why": "/design は、画面・画面の流れ・ランディングページ・ポスターなどを、1つのキャンバスの上のアートボードとして下書きする。",
+      "success": "Claude が下絵を作り、アーティファクトのリンクを返した。",
+      "pitfalls": [
+        "Claude から「/design consent を実行して」と言われたら、自分で入力欄に /design consent と打つ（Claude Design へのアクセスを許可するコマンド。取り消すのは /design revoke）。",
+        "Pro・Max・Ultra では、アーティファクトは、自分が共有するまで自分だけに見える。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "ブラウザで開いて、1か所直す",
+      "do": "返ってきたリンクを、パソコンのブラウザで開く。アートボードの上の要素を1つ選んで、変える。",
+      "why": "下絵は、ブラウザの上で直接直せる。直した内容は自動で保存される。",
+      "success": "1か所直せた。",
+      "pitfalls": [
+        "アートボードは、1枚ずつ PNG か PDF で書き出せる。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-225051-local-claude-design/demo.cast",
+    "note": "/status で条件を確かめ、/design に「読書記録アプリのホーム画面（スマホ用）」を渡して、下絵のリンクが返るまでの録画。ブラウザでの操作は言葉の説明だけ。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

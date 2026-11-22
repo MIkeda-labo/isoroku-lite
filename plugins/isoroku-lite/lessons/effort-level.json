@@ -1,0 +1,68 @@
+{
+  "id": "effort-level",
+  "title": "エフォートレベルを、作業に合わせて変える",
+  "summary": "いまのエフォートレベルを確かめ、/effort でこの回だけ変えて、元に戻すところまでやります。",
+  "tier": "S",
+  "order": 5,
+  "practice": {
+    "dir": "~/practice/effort-level",
+    "firstMessage": "こんにちは。エフォートレベルの切り替えを練習したいです。いまのレベルはどうやって確かめる？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/model-config",
+    "https://code.claude.com/docs/en/commands"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "いまのエフォートレベルを確かめる",
+      "do": "/effort status と打つ。",
+      "why": "変える前に、いまのレベルを知っておくと、あとで元に戻せるため。",
+      "success": "いまのレベル（low / medium / high / xhigh / max のどれか）を言える（メモしておく）。",
+      "pitfalls": [
+        "選べるレベルは、モデルによって違う。エフォートに対応していないモデルもある。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "/effort でつまみを開き、この回だけ変える",
+      "do": "/effort と打ってつまみ（スライダー）を開き、レベルを選んで、s を押す（この回だけ変える）。",
+      "why": "Enter で決めると、そのレベルが既定として保存され、あとのセッションにも効く。練習では、既定を変えない s を使う。",
+      "success": "/effort status で、レベルが変わっている。",
+      "pitfalls": [
+        "/effort low のようにレベルを直接打つと、Enter と同じ扱いになり、既定として保存される。",
+        "max は、この回だけに効く。",
+        "s でこの回だけ変えるには、Claude Code v2.1.257 以降が要る。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "どの作業にどのレベルかを言えるようにする",
+      "do": "low・medium・high のそれぞれについて、合う作業の例を1つずつ言う。",
+      "why": "レベルは、使うトークンと、考える深さの引き換え。低いほど速くて安く、高いほど深く考える。",
+      "success": "low = 結果を毎回自分で見る短いやり取りや、名前の変更のような小さな変更。medium = 範囲がはっきりした日々の作業。high = 確かめが大事な作業や、既存のコードのバグ修正。と言える。",
+      "pitfalls": [
+        "max は難しい問題向けだが、効果が頭打ちになったり、考えすぎたりしやすい（公式）。広く使う前に試す。",
+        "同じ名前のレベルでも、モデルが違えば中身は同じではない（モデルごとに調整されている）。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "元のレベルに戻す",
+      "do": "/effort と打ってつまみを開き、手順1でメモしたレベルに合わせて、s を押す。",
+      "why": "練習で変えたままにしないため。",
+      "success": "/effort status で、手順1と同じレベルに戻っている。",
+      "pitfalls": []
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-222659-local-effort-level/demo.cast",
+    "note": "/effort status で確かめ、/effort のつまみを high にして s でこの回だけ変え、/effort auto で元（auto）に戻すまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

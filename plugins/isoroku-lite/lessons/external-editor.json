@@ -1,0 +1,65 @@
+{
+  "id": "external-editor",
+  "title": "長い依頼文を、エディタで書いて送る（Ctrl+G）",
+  "summary": "入力中の依頼文を Ctrl+G でエディタに開き、直して保存し、Claude Code に送るところまでやります。",
+  "tier": "S",
+  "order": 8,
+  "practice": {
+    "dir": "~/practice/external-editor",
+    "firstMessage": "こんにちは。長い依頼文をエディタで書く練習をしたいです。入力中の文をエディタで開くキーは何？"
+  },
+  "status": "draft",
+  "updated": "2026-11-11",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=38SMwIttSW0（まさやん【AIギルドch】「Claude Code 全100機能ティア表 完全版」で Tier S。講座の順番の元。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（demo を参照）",
+    "どのエディタが開くかは、公式ページに「既定のテキストエディタ」としか書かれていない。この PC で何が開くかは、まだ確かめていない"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/interactive-mode",
+    "https://code.claude.com/docs/en/memory"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "入力欄に、依頼文の出だしを書く",
+      "do": "Claude Code の入力欄に「次の3つをやってください。」とだけ打つ。まだ Enter は押さない。",
+      "why": "Ctrl+G は、いま入力欄にある文をエディタに持っていく。",
+      "success": "入力欄に文が入っていて、まだ送っていない。",
+      "pitfalls": []
+    },
+    {
+      "id": "2",
+      "title": "Ctrl+G でエディタを開く",
+      "do": "Ctrl キーを押しながら G を押す。",
+      "why": "依頼文を、この PC の既定のテキストエディタで直せる。長い文や、貼り付けたあとで手直ししたい文に向く。",
+      "success": "エディタが開き、手順1で打った文が入っている。",
+      "pitfalls": [
+        "Ctrl+X のあとに Ctrl+E と押しても、同じことができる。",
+        "ターミナルの中で動くエディタ（Vim など）が開いたときは、そのエディタを終えるまで、ターミナルはエディタのものになる。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "エディタで書き足して、保存して閉じる",
+      "do": "続きに、やってほしいことを3行書く（例: 「1. memo.txt を作る」「2. 今日の日付を書く」「3. 中身を見せる」）。保存して、エディタを閉じる。",
+      "why": "保存して閉じると、書いた文が Claude Code の入力欄に戻る。",
+      "success": "Claude Code の入力欄に、エディタで書いた文が入っている。",
+      "pitfalls": []
+    },
+    {
+      "id": "4",
+      "title": "送る",
+      "do": "入力欄の文を確かめて、Enter を押す。",
+      "why": "エディタから戻っただけでは、まだ送られていない。",
+      "success": "Claude が、書いた3つを順にやった。",
+      "pitfalls": [
+        "/config で「Show last response in external editor」をオンにすると、エディタを開いたとき、Claude の直前の返事が # 付きのコメントとして上に入る（保存するとき、コメントの部分は取り除かれる）。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-222918-local-external-editor/demo.cast",
+    "note": "入力欄に出だしを打ち、Ctrl+G で nano を開いて3行書き足し、保存して閉じ、Enter で送るまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

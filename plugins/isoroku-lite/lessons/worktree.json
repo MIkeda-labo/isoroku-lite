@@ -1,0 +1,82 @@
+{
+  "id": "worktree",
+  "title": "ワークツリーで、作業場所を分けて並べて進める",
+  "summary": "claude --worktree で別の作業場所を作り、元のフォルダを汚さずに変更してみます。サブエージェントを別の作業場所で動かす設定も知ります。",
+  "order": 14,
+  "practice": {
+    "dir": "~/practice/worktree",
+    "firstMessage": "こんにちは。ワークツリーで作業場所を分けてみたいです。まず何をすればいい？",
+    "exampleCommand": "! git worktree list"
+  },
+  "status": "draft",
+  "updated": "2026-11-21",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=cXcwNtMvLC4（まさやん【AIギルドch】「Claude Code ループエンジニアリング 完全版」。複数のエージェントの作業がぶつからないよう、ワークツリーで分ける話。使い方の中身は公式ドキュメントで確かめた）",
+    "手順は公式ドキュメントから作った。実演の録画は 2026-11-21 に録った（Claude Code 2.1.330。demo を参照）。手順1〜5が手順どおりに動いた",
+    "実演で分かったこと: 作業場所の中から元のフォルダのファイルを読むと、作業フォルダの外として許可を聞かれた。起動し直した会話には前の会話の続きが無い（新しい会話になる）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/worktrees",
+    "https://code.claude.com/docs/en/sub-agents"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "練習フォルダを git のリポジトリにする",
+      "do": "Claude に「このフォルダで git を始めて、hello.txt（中身は『こんにちは』）を作って最初のコミットをして。.gitignore に .claude/worktrees/ も入れて」と頼む。",
+      "why": "--worktree は git のリポジトリの中でしか使えない。作業場所は .claude/worktrees/ の下にできるので、git の管理から外しておく。",
+      "success": "git log に最初のコミットがあり、.gitignore に .claude/worktrees/ が書いてある。",
+      "pitfalls": [
+        "git のリポジトリでないところで --worktree を使うと「Can only use --worktree in a git repository」と出る。",
+        "コミットで「名前とメールが無い」と言われることがある（git の初めての設定をしていない PC など）。このフォルダだけの名前とメールを git config で入れてから、もう一度コミットする。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "別の作業場所で Claude Code を起動する",
+      "do": "いまの Claude Code を /exit で閉じ、黒い画面で「claude --worktree hello-en」と打って起動する（-w hello-en でも同じ）。",
+      "why": "ワークツリーは、同じリポジトリの別の作業場所。.claude/worktrees/hello-en/ に、worktree-hello-en という新しいブランチでできる。ここでの変更は、元のフォルダに影響しない。",
+      "success": "起動の画面の作業フォルダが …/.claude/worktrees/hello-en になっている（「! pwd」でも確かめられる）。",
+      "pitfalls": [
+        "起動し直すと新しい会話になる。前の会話で話したことは引き継がれないので、何をしたいかをもう一度伝える。",
+        "初めてのフォルダでは「このフォルダを信頼するか」を聞かれる。先に、そのフォルダで一度 claude を起動しておく。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "作業場所の中で変更して、元のフォルダと比べる",
+      "do": "「hello.txt を英語の Hello に書き換えてコミットして」と頼む。そのあと「! cat ~/practice/worktree/hello.txt」で、元のフォルダの hello.txt を見る。",
+      "why": "作業場所が分かれているので、片方で書き換えても、もう片方のファイルは変わらない。複数の Claude を同時に動かしても、同じファイルの取り合いにならない。",
+      "success": "作業場所の hello.txt は Hello、元のフォルダの hello.txt は「こんにちは」のまま。",
+      "pitfalls": [
+        "作業場所の中から見ると、元のフォルダは「作業フォルダの外」になる。Claude に元のフォルダを読ませると、許可を聞かれることがある。",
+        "ワークツリーは新しく取り出した作業場所なので、.env など git に入れていないファイルは入っていない。必要なら .worktreeinclude に書いて写させる。",
+        "プログラムの部品（npm install など）は、作業場所ごとに入れ直しが要る。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "終わるときの片付けを選ぶ",
+      "do": "/exit で終了する。「Keep worktree（残す）／Remove worktree（消す）」と聞かれたら、今回は Keep worktree を選ぶ。そのあと元のフォルダで「! git worktree list」と「! git branch」を打って、作業場所とブランチが残っていることを見る。",
+      "why": "名前を付けた作業場所は、終わるときに残すか消すかを聞かれる（名前を付けずに起動した場合は、変更が無ければ自動で消える）。続きは claude --worktree hello-en --resume で再開できる。",
+      "success": "git worktree list に hello-en の作業場所があり、git branch に worktree-hello-en がある。",
+      "pitfalls": [
+        "要らなくなった作業場所を残したままにして、ブランチが増えていく。使い終わったら消す。"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "サブエージェントを別の作業場所で動かす設定を知る",
+      "do": "サブエージェントのファイル（.claude/agents/<名前>.md）のフロントマターに「isolation: worktree」と書くと何が起きるかを、自分の言葉で言う。",
+      "why": "isolation: worktree を付けたサブエージェントは、一時的なワークツリーの中で作業する。何も変更しなければ、作業場所は自動で片付く。",
+      "success": "「サブエージェントが一時的な別の作業場所で動くので、メインの作業とファイルがぶつからない」と言える。",
+      "pitfalls": [
+        "「今後この確認はしない」と許可したものは、作業場所ではなく元のフォルダの .claude/settings.local.json に保存される。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-233856-local-worktree/demo.cast",
+    "note": "git の準備、claude --worktree hello-en での起動、作業場所での書き換えと元のフォルダとの比べ、/exit での Keep worktree、元のフォルダでの git worktree list・git branch、isolation: worktree の説明までの録画。Claude Code を3回起動している。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}

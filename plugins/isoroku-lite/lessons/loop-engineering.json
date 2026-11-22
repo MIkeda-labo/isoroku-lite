@@ -1,0 +1,94 @@
+{
+  "id": "loop-engineering",
+  "title": "内側と外側のループを、小さく組む（ループエンジニアリング）",
+  "summary": "スキル（手順と合格条件）・検証役のサブエージェント・/loop で「回すループ」を作り、うまくいかなかった点を CLAUDE.md に戻す「直すループ」まで1周させます。/loop・サブエージェント・スキルの講座のあとに。",
+  "order": 16,
+  "practice": {
+    "dir": "~/practice/loop-engineering",
+    "firstMessage": "こんにちは。内側と外側のループを小さく組んでみたいです。まず何をすればいい？",
+    "exampleCommand": "! echo '来週の月曜は祝日なので、定例会議は火曜に移す。' > inbox/memo1.txt",
+    "check": "skills"
+  },
+  "status": "draft",
+  "updated": "2026-11-21",
+  "basedOn": [
+    "https://www.youtube.com/watch?v=cXcwNtMvLC4（まさやん【AIギルドch】「Claude Code ループエンジニアリング 完全版」。考え方（指示する人をループに置き換える／生成役と検証役を分ける／内側のループと、学びを戻す外側のループ）は、この動画から。動画の実例のうち、Codex App と、Discord・GitHub Issue・Notion・CMS・SNS などの外部サービスを使う部分は省き、練習フォルダの中だけでできる形にした）",
+    "Claude Code の使い方（スキル・サブエージェント・/loop・CLAUDE.md）は、公式ドキュメントで確かめた。実演の録画は 2026-11-21 に録った（Claude Code 2.1.330。demo を参照）。手順1〜6が手順どおりに動いた",
+    "実演で分かったこと: /loop 2m /memo-digest で、自作のスキルが間隔ごとに呼ばれた。digest-checker はバックグラウンドのサブエージェントとして動き、判定が届いてから返事が続いた。手順4では、講師役の Claude が学びを CLAUDE.md ではなくスキルに書き、確かめる役の合格条件にも同じ条件を足した（その仕事だけの約束はスキルへ、どの作業にも効く約束は CLAUDE.md へ）"
+  ],
+  "sources": [
+    "https://code.claude.com/docs/en/scheduled-tasks",
+    "https://code.claude.com/docs/en/sub-agents",
+    "https://code.claude.com/docs/en/skills",
+    "https://code.claude.com/docs/en/memory"
+  ],
+  "steps": [
+    {
+      "id": "1",
+      "title": "手順と合格条件を、スキルに書く",
+      "do": "Claude に「.claude/skills/memo-digest/SKILL.md を作って。inbox/ の .txt を1つずつ読み、1行の要約を digest.md の最後に足し、読んだファイルは inbox/done/ へ動かす手順。合格条件は『要約は40字以内』『日付や曜日は元のメモのとおり』。最後に digest-checker サブエージェントに確かめさせる」と頼む。あわせて inbox/ と空の digest.md も作ってもらう。",
+      "why": "ループで毎回同じ品質を出すには、手順と「何ができたら合格か」を書き留めておく場所が要る。それがスキル。",
+      "success": ".claude/skills/memo-digest/SKILL.md に、手順と合格条件が書いてある。inbox/ と digest.md がある。",
+      "pitfalls": [
+        "作ったスキルは、ふつうは起動し直さなくても読み込まれる。/memo-digest が出てこないときは、/reload-skills を打つ。"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "確かめる役を、別のサブエージェントにする",
+      "do": "Claude に「.claude/agents/digest-checker.md を作って。digest.md と inbox/done/ の元のメモを読み、合格条件を満たしているかだけを判定して、だめな行と理由を返す役。道具は Read, Grep, Glob だけ」と頼む。",
+      "why": "作った本人に自分の出来を判定させると甘くなりやすい（動画の考え方）。作る役と確かめる役を分ける。確かめる役は読むだけにしておく。",
+      "success": ".claude/agents/digest-checker.md があり、tools が Read, Grep, Glob になっている。",
+      "pitfalls": [
+        "サブエージェントが見つからないと言われる。Claude Code を起動し直してから、もう一度頼む。"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "内側のループを回す",
+      "do": "入力欄に「/loop 2m /memo-digest」と打つ。そのあと先頭に ! を付けて「! echo '来週の月曜は祝日なので、定例会議は火曜に移す。' > inbox/memo1.txt」と打ち、何も打たずに待つ。",
+      "why": "/loop は、頼みごと（スキルの呼び出しでもよい）を決まった間隔で繰り返させる。見つける → 作る → 確かめる、が人の指示なしで回る。これが内側のループ。",
+      "success": "「Running scheduled task」のあと Skill(memo-digest) が動き、digest.md に1行増え、memo1.txt が inbox/done/ に動く。digest-checker(…) の行が出て、判定（合格など）が会話に出る。",
+      "pitfalls": [
+        "話しかけ続けていると、予定はその返事が終わるまで待たされる。待つときは何も打たない。",
+        "間隔を決めた /loop は、Esc では止まらない。止めるときは「memo-digest の見張りを止めて」と頼む。"
+      ]
+    },
+    {
+      "id": "4",
+      "title": "外側のループ：学びを CLAUDE.md に戻す",
+      "do": "digest.md を見て、直してほしい点を1つ見つける（例:「要約の頭に日付を付けてほしい」）。Claude に「次からこうしてほしい。この学びを、合うところ（CLAUDE.md かスキル）に書き足して」と頼む。",
+      "why": "回すたびに出た失敗や直してほしい点を、次の回が読む場所に戻すのが外側のループ。CLAUDE.md は毎回のセッションの始めに読まれ、スキルはその仕事のときに読まれる。",
+      "success": "CLAUDE.md か SKILL.md に、その学びが書き足されている。確かめる役（digest-checker）の合格条件にも、同じ条件が足されている。",
+      "pitfalls": [
+        "作る役の手順だけ直して、確かめる役の基準を直し忘れる。両方の基準がずれると、正しく直した結果が不合格になる。",
+        "会話の中で「次からこうして」と言うだけで、どこにも書かない。会話が終わると忘れる。",
+        "CLAUDE.md やメモリに書いたことは、決まりとして強制されるわけではない（読んだうえで Claude が従う）。必ず守らせたいことは、確かめる役の合格条件にも入れる。"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "次の回で、学びが効いたかを見る",
+      "do": "「! echo '金曜までに見積もりを出す。' > inbox/memo2.txt」と打って待つ。次の回の要約を見る。終わったら見張りを止める。",
+      "why": "外側のループがうまく回っていれば、同じ指摘を二度しなくてよくなる。回すほど良くなる、を自分の目で確かめる。",
+      "success": "memo2 の要約が、手順4で足した学びのとおりになっている。見張りの予定が止まっている。",
+      "pitfalls": [
+        "繰り返しの予定には期限があり、自動で消える（公式ページは7日、この PC の Claude Code 2.1.330 の表示は30日）。長く回すつもりなら、予定を作ったときの表示で確かめる。"
+      ]
+    },
+    {
+      "id": "6",
+      "title": "ループに向く仕事・向かない仕事を言えるようにする",
+      "do": "自分の仕事から、ループに向くものと向かないものを1つずつ挙げる。",
+      "why": "ループの良さは、繰り返すたびに良くなること。1回きりの仕事では、仕組みを作る手間に見合わない（動画の考え方）。",
+      "success": "「毎週・毎日くり返す仕事は向く」「1回きりの仕事は向かない」を、自分の例で言える。",
+      "pitfalls": [
+        "止める条件を決めずに回し始める。終わりの条件を先に決める（/goal の講座も参照）。"
+      ]
+    }
+  ],
+  "demo": {
+    "recording": "demos/20261121-234758-local-loop-engineering/demo.cast",
+    "note": "スキル memo-digest と検証役 digest-checker を作り、/loop 2m /memo-digest で1周目（合格）、学びをスキルと検証役に書き戻し、2つめのメモで学びが効いたこと（日付つき・合格）を確かめて見張りを止め、向く仕事・向かない仕事を話すまでの録画。録画は git に入れていないので、実演した PC でだけ見られる。"
+  }
+}
