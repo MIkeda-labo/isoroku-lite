@@ -119,8 +119,32 @@
 - **結果**: 講座の一覧が出ます（16 講座）。
 - `/isoroku-lite:start` が見つからないときは、⌨ `/reload-plugins` を打ってから、もう一度打ちます。
 
-**18.** ⌨ `/isoroku-lite:start goal`（`goal` のところは、選んだ講座の id）
+**18.** 始めたい講座の id を選んで、⌨ `/isoroku-lite:start` + 半角スペース + id を打ちます。講座「goal」なら、打つのはこれだけです:
+```
+/isoroku-lite:start goal
+```
 - **結果**: 「講座を始めた」と出て、コーチ（あなたの Claude Code）が手順1を案内します。
+- 講座の id は次のとおりです（手順17の一覧と同じ）。
+
+| id | 講座 |
+|---|---|
+| `subagents` | サブエージェントを1つ作って、仕事を任せる |
+| `skill-creation` | Claude Code のスキルを1つ作る |
+| `model-selection` | モデルを選ぶ・切り替える |
+| `effort-level` | エフォートレベルを、作業に合わせて変える |
+| `claude-design` | /design で、画面の下絵（デザイン）を作る |
+| `session-naming` | セッションに名前を付けて、あとで戻る |
+| `external-editor` | 長い依頼文を、エディタで書いて送る（Ctrl+G） |
+| `claude-md` | CLAUDE.md に、いつも守ってほしいことを書く |
+| `notifications` | 作業が終わったら知らせてもらう（通知設定） |
+| `security-review` | /security-review で、変更の安全性を調べる |
+| `loop` | /loop で、決まった間隔で同じ仕事を繰り返させる |
+| `goal` | /goal で、終わりの条件を満たすまで続けさせる |
+| `worktree` | ワークツリーで、作業場所を分けて並べて進める |
+| `remote-control` | /remote-control で、PC の Claude Code をスマホから続ける |
+| `loop-engineering` | 内側と外側のループを、小さく組む（ループエンジニアリング） |
+| `complex-task` | デスクトップ版で、複雑な課題を仕上げる（※ isoroku-lite では手順1のとおりにはできない。README を参照） |
+
 - 練習用のフォルダの目安がいまのフォルダと違うと言われたら、そのフォルダで手順13からやり直します。
 
 ---

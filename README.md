@@ -64,6 +64,30 @@ isoroku（VPS のコーチ・ローカルの Gemma・画面つき）を、プラ
 | `/isoroku-lite:status` | 進み具合 |
 | `/isoroku-lite:stop` | この作業フォルダの講座をやめる（見守りも止まる） |
 
+## 講座の一覧
+講座を始めるときは、プロンプト欄に `/isoroku-lite:start` と打ち、続けて半角スペースと下の id を打ちます（例: `/isoroku-lite:start goal`）。
+
+| id（`/isoroku-lite:start <id>`） | 講座 | 手順の数 |
+|---|---|---|
+| `subagents` | サブエージェントを1つ作って、仕事を任せる | 4 |
+| `skill-creation` | Claude Code のスキルを1つ作る | 6 |
+| `model-selection` | モデルを選ぶ・切り替える | 4 |
+| `effort-level` | エフォートレベルを、作業に合わせて変える | 4 |
+| `claude-design` | /design で、画面の下絵（デザイン）を作る | 3 |
+| `session-naming` | セッションに名前を付けて、あとで戻る | 4 |
+| `external-editor` | 長い依頼文を、エディタで書いて送る（Ctrl+G） | 4 |
+| `claude-md` | CLAUDE.md に、いつも守ってほしいことを書く | 4 |
+| `notifications` | 作業が終わったら知らせてもらう（通知設定） | 4 |
+| `security-review` | /security-review で、変更の安全性を調べる | 4 |
+| `loop` | /loop で、決まった間隔で同じ仕事を繰り返させる | 5 |
+| `goal` | /goal で、終わりの条件を満たすまで続けさせる | 5 |
+| `worktree` | ワークツリーで、作業場所を分けて並べて進める | 5 |
+| `remote-control` | /remote-control で、PC の Claude Code をスマホから続ける | 5 |
+| `loop-engineering` | 内側と外側のループを、小さく組む（ループエンジニアリング） | 6 |
+| `complex-task` | デスクトップ版で、複雑な課題を「計画 → 確かめ → 作る → 見直す」で仕上げる（※） | 6 |
+
+※ `complex-task` は、もとは isoroku でデスクトップ版の WSL のセッションを使う講座です。そのセッションではプラグインが使えないため、isoroku-lite では講座の手順1（WSL のセッションを開く）のとおりには練習できません。
+
 ## しくみ
 ```
 あなた ──操作──▶ Claude Code（作業の手伝い ＋ コーチ）
