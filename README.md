@@ -10,6 +10,8 @@ Claude Code の使い方を、**あなた自身の Claude Code がコーチす�
 
 isoroku（VPS のコーチ・ローカルの Gemma・画面つき）を、プラグインだけで動く形にした軽い版です。
 
+**はじめて使う人は [GETTING-STARTED.md](GETTING-STARTED.md)（何も入っていない PC から講座を始めるまでの手順）を、上から順に見てください。**
+
 ## 要るもの
 - Claude Code（2.1.330 で確かめた）
 - Node.js（フックとスキルの道具を動かすため。v24 で確かめた。`node --version` で入っているか見られる）
