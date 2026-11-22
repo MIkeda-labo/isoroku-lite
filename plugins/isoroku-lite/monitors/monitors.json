@@ -1,0 +1,8 @@
+[
+  {
+    "name": "watch",
+    "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/monitor.mjs\" --data \"${CLAUDE_PLUGIN_DATA}\" --project \"${CLAUDE_PROJECT_DIR}\"",
+    "description": "isoroku-lite の見守り（15秒ごとに会話の記録を読み、詰まったときだけ知らせる）",
+    "when": "on-skill-invoke:isoroku-lite:start"
+  }
+]

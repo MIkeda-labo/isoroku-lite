@@ -26,6 +26,12 @@ export function handle(input, { env = process.env, now = Date.now(), lessonsDir 
   const lesson = loadLessons(lessonsDir).find((l) => l.id === entry.lessonId);
   if (!lesson) return null;
 
+  // 会話の記録の場所を覚える（時間を区切る見守り monitor.mjs が読む）。Claude Code が渡す transcript_path をそのまま使う
+  if (typeof input.transcript_path === 'string' && input.transcript_path && entry.transcriptPath !== input.transcript_path) {
+    entry.transcriptPath = input.transcript_path;
+    writeState(dir, state);
+  }
+
   let text = null;
   switch (event) {
     case 'SessionStart':

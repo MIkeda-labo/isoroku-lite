@@ -96,7 +96,14 @@ isoroku-lite は、ターミナルの Claude Code（CLI）で使う前提です�
    UserPromptSubmit   … いまの手順の短い念押し
    PostToolUse        … 成功したら「続いたエラー」を数え直す
    PostToolUseFailure … 5分以内にエラーが2回続いたら「方向のヒントで声をかけて」（一度言ったら3分は黙る）
+                     ▲ モニターの通知（時間を区切る見守り）
+   monitor.mjs        … 15秒ごとに会話の記録の末尾を読む（isoroku の判定を移したもの）
+                        ・10分以内にエラーが2回 → 声をかけて
+                        ・エラーのあと2分、何も起きていない → 声をかけて（フックでは気づけない「止まっている」）
 ```
+- **見守り（モニター）**: `/isoroku-lite:start` を打つと起動し、セッションが終わるまで動きます（画面の下に「1 monitor」と出ます）。
+  声をかけるときだけ1行を出し、それが通知として Claude に届きます。何も起きていなければ何も出さないので、トークンを使いません。
+  声をかけないとき: 直近の道具が2回続けて成功した（解決した）／同じエラーにはもう声をかけた／前に声をかけた時刻より前のエラー（フックと共有）／前回から3分以内／直近1時間で6回。
 - 状態は `${CLAUDE_PLUGIN_DATA}/state.json` に、作業フォルダごとに置きます（講座・手順・ヒントの段・最近のエラー）。
 - 講座は `plugins/isoroku-lite/lessons/*.json`（正本は isoroku の `lessons/`。写して使う）。
 - スキルは、本文の `` !`node "${CLAUDE_PLUGIN_ROOT}/scripts/cli.mjs" …` `` で状態を変え、その結果を Claude に渡します。
@@ -108,11 +115,16 @@ isoroku-lite は、ターミナルの Claude Code（CLI）で使う前提です�
 - 本物の Claude Code（`claude -p --plugin-dir …`）で:
   - `/isoroku-lite:start goal` → 状態ができ、コーチが手順1を案内した（練習フォルダの違いにも気づいた）。
   - `ls` の失敗を2回続けさせる → フックが2件記録し、返事の終わりに「コーチから一言」（方向のヒントと `/isoroku-lite:hint` の案内）が出た。
-- テスト: `node --test plugins/isoroku-lite/tests/*.test.mjs`（11 件）。
+- 対話の画面（tmux の中で `claude --plugin-dir …`）で、見守り（モニター）を:
+  - `/isoroku-lite:start goal` でモニターが起動した（「1 monitor」）。`${CLAUDE_PLUGIN_DATA}`・`${CLAUDE_PROJECT_DIR}` も置き換わった。
+    `when` は `on-skill-invoke:isoroku-lite:start`（名前空間つき）でないと起動しなかった。
+  - `ls` の失敗を1回だけ起こして、2分あまり何もしない → 「Monitor event: isoroku-lite の見守り: エラーのあと、2分以上動きが止まっている…」が届き、
+    **手の空いていた Claude が起きて**、こちらが何も打たないうちに、方向だけのヒントで声をかけた。
+- テスト: `node --test plugins/isoroku-lite/tests/*.test.mjs`（18 件）。
 
 ## 限界・まだ確かめていないこと
-- 対話の画面（`claude` をふつうに起動）、デスクトップ版、VS Code では、まだ試していません。
-- コーチは作業する Claude と同じなので、isoroku のように「別の目」で見るわけではありません。声をかける条件も、いまはエラーだけです。
+- デスクトップ版（ローカルのセッション）、VS Code では、まだ試していません。モニターは `claude -p` では起動しません（公式）。
+- コーチは作業する Claude と同じなので、isoroku のように「別の目」で見るわけではありません。声をかける条件は、エラーが続く・エラーのあと止まる、の2つだけです。
 - `!` を付けてあなたが打ったコマンドで、フックが走るかは確かめていません。別のターミナルでした作業は見えません。
 - 講座の中身は isoroku の下書きのままです（多くは録画・本物での通しがまだ）。
 - ライセンス: MIT（LICENSE）。
@@ -121,6 +133,8 @@ isoroku-lite は、ターミナルの Claude Code（CLI）で使う前提です�
 - プラグインの作り・`${CLAUDE_PLUGIN_ROOT}`・`${CLAUDE_PLUGIN_DATA}`・`bin/`・`claude plugin validate`: https://code.claude.com/docs/en/plugins-reference
 - `--plugin-dir`: https://code.claude.com/docs/en/plugins
 - フックの入力・`hookSpecificOutput.additionalContext`・PostToolUseFailure: https://code.claude.com/docs/en/hooks
+- モニター（`monitors/monitors.json`・`when`・出した行が通知として Claude に届く・`-p` では起動しない）: https://code.claude.com/docs/en/plugins/components 、https://code.claude.com/docs/en/plugins-reference
+- `/loop` ではなくモニターにした理由（「often more token-efficient and responsive than re-running a prompt on an interval」）: https://code.claude.com/docs/en/scheduled-tasks
 - スキルの `` !`…` ``・`$ARGUMENTS`・`allowed-tools`・`disable-model-invocation`: https://code.claude.com/docs/en/skills
 - マーケットプレイスと入れ方・Claude Code が取ってくること・更新と削除: https://code.claude.com/docs/en/plugin-marketplaces
 - スコープ（user・project・local）: https://code.claude.com/docs/en/discover-plugins
