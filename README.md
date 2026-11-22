@@ -12,20 +12,43 @@ isoroku（VPS のコーチ・ローカルの Gemma・画面つき）を、プラ
 
 ## 要るもの
 - Claude Code（2.1.330 で確かめた）
-- Node.js（フックとスキルの道具を動かすため。v24 で確かめた）
+- Node.js（フックとスキルの道具を動かすため。v24 で確かめた。`node --version` で入っているか見られる）
+- git（Claude Code が GitHub から取ってくるのに使う。git が入った PC で確かめた）
 
-## 入れ方
-GitHub から:
+## 入れ方（ほかの PC で、はじめて入れるとき）
+
+**フォルダを作ったり、`git clone` したりする必要はありません。** 次の2行を打つと、Claude Code が自分で GitHub から取ってきて、自分の置き場所に入れます。
+
+**1.** どこでもよいので Claude Code を起動し（ターミナルで `claude`）、プロンプト欄に1行ずつ打って Enter:
 ```
 /plugin marketplace add MIkeda-labo/isoroku-lite
 /plugin install isoroku-lite@isoroku-lite
 ```
-手元のフォルダから:
-```
-claude plugin marketplace add ./isoroku-lite
-claude plugin install isoroku-lite@isoroku-lite
-```
-試すだけなら、入れずに `claude --plugin-dir ./isoroku-lite/plugins/isoroku-lite` で起動できます。
+- 1行目で「isoroku-lite という置き場所（マーケットプレイス）」を登録し、2行目でそこからプラグインを入れます。
+- ターミナルで打つときは、`/` の代わりに頭に `claude` を付けます（`claude plugin marketplace add MIkeda-labo/isoroku-lite`、`claude plugin install isoroku-lite@isoroku-lite`）。
+- 何もしなければ、その PC のあなたのすべての作業フォルダで使えるように入ります（user スコープ）。
+
+**2.** 起動中の Claude Code ですぐに出てこないときは、`/reload-plugins` を打つか、Claude Code を開き直します。
+
+**3.** 練習用のフォルダを作って、そこで Claude Code を開き、`/isoroku-lite:start` を打ちます（下の「使い方」）。
+
+**どこに入るか**（自分で触る必要はありません）: Claude Code の設定フォルダ（ふつうは `~/.claude`）の中の `plugins/marketplaces/isoroku-lite/`（GitHub から取ってきた写し）と `plugins/cache/isoroku-lite/` です。講座の進み具合は `plugins/data/` の下に置かれます。
+
+### 更新・削除
+| すること | 打つもの（ターミナル） |
+|---|---|
+| 新しい版があるか取ってくる | `claude plugin marketplace update isoroku-lite` |
+| プラグインを新しい版にする | `claude plugin update isoroku-lite@isoroku-lite` |
+| プラグインを外す | `claude plugin uninstall isoroku-lite@isoroku-lite` |
+| 置き場所ごと消す（入れたプラグインも外れる） | `claude plugin marketplace remove isoroku-lite` |
+
+### 入れずに試す・手元のフォルダから入れる（作る人向け）
+- このリポジトリを手元に持っているなら、`claude --plugin-dir ./isoroku-lite/plugins/isoroku-lite` で、入れずにそのときだけ読み込めます。
+- 手元のフォルダを置き場所として登録するなら、`claude plugin marketplace add ./isoroku-lite` → `claude plugin install isoroku-lite@isoroku-lite`。
+
+### 使えない場所
+- デスクトップ版の **WSL のセッション**では、プラグインが使えません（公式の制限: 「Plugins aren't available in WSL sessions.」 https://code.claude.com/docs/en/desktop ）。
+- デスクトップ版のローカルのセッション、VS Code では、まだ試していません。
 
 ## 使い方
 練習用のフォルダで Claude Code を開いてから使います（講座ごとに目安のフォルダが出ます。例: `~/practice/goal`）。
@@ -73,4 +96,6 @@ claude plugin install isoroku-lite@isoroku-lite
 - `--plugin-dir`: https://code.claude.com/docs/en/plugins
 - フックの入力・`hookSpecificOutput.additionalContext`・PostToolUseFailure: https://code.claude.com/docs/en/hooks
 - スキルの `` !`…` ``・`$ARGUMENTS`・`allowed-tools`・`disable-model-invocation`: https://code.claude.com/docs/en/skills
-- マーケットプレイスと入れ方: https://code.claude.com/docs/en/plugin-marketplaces
+- マーケットプレイスと入れ方・Claude Code が取ってくること・更新と削除: https://code.claude.com/docs/en/plugin-marketplaces
+- スコープ（user・project・local）: https://code.claude.com/docs/en/discover-plugins
+- デスクトップ版でのプラグイン: https://code.claude.com/docs/en/desktop
