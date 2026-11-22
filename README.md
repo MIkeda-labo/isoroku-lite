@@ -84,9 +84,9 @@ isoroku（VPS のコーチ・ローカルの Gemma・画面つき）を、プラ
 | `worktree` | ワークツリーで、作業場所を分けて並べて進める | 5 |
 | `remote-control` | /remote-control で、PC の Claude Code をスマホから続ける | 5 |
 | `loop-engineering` | 内側と外側のループを、小さく組む（ループエンジニアリング） | 6 |
-| `complex-task` | デスクトップ版で、複雑な課題を「計画 → 確かめ → 作る → 見直す」で仕上げる（※） | 6 |
+| `complex-task` | 複雑な課題を「計画 → 確かめ → 作る → 見直す」で仕上げる | 6 |
 
-※ `complex-task` は、もとは isoroku でデスクトップ版の WSL のセッションを使う講座です。そのセッションではプラグインが使えないため、isoroku-lite では講座の手順1（WSL のセッションを開く）のとおりには練習できません。
+isoroku-lite は、ターミナルの Claude Code（CLI）で使う前提です。どの講座も CLI で練習できます。
 
 ## しくみ
 ```

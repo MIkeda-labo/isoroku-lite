@@ -143,7 +143,7 @@
 | `worktree` | ワークツリーで、作業場所を分けて並べて進める |
 | `remote-control` | /remote-control で、PC の Claude Code をスマホから続ける |
 | `loop-engineering` | 内側と外側のループを、小さく組む（ループエンジニアリング） |
-| `complex-task` | デスクトップ版で、複雑な課題を仕上げる（※ isoroku-lite では手順1のとおりにはできない。README を参照） |
+| `complex-task` | 複雑な課題を「計画 → 確かめ → 作る → 見直す」で仕上げる |
 
 - 練習用のフォルダの目安がいまのフォルダと違うと言われたら、そのフォルダで手順13からやり直します。
 
